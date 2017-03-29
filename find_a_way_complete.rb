@@ -33,7 +33,7 @@ class GoogleMaps
 
     system 'clear'
 
-    # This prints out the data
+    # Prints the distance and time from the origin to the destination
     puts "You're " +
     matrix[:rows][0][:elements][0][:distance][:text] + " " +
     "away from #{destinations}"
@@ -56,9 +56,11 @@ class GoogleMaps
   end
 
   # this accesses the directions and stores them in an array
-  def access_directions(json_dir, street)
+  def access_directions(json_dir)
 
+    # Array to store the stripped directions to use later in the program
     directions = []
+
     # This changes arrays to hashes from the JSON data
     hash1 = Hash[*json_dir]
     array1 = hash1[:legs]
@@ -66,15 +68,9 @@ class GoogleMaps
     steps = hash2[:steps]
 
     arr_cycle = 0
-    # stop_loop = false
 
-    puts 'street inspect'
-    puts street.inspect
-
-    street = 'destination'
-
+    # cycles through the hashed JSON, transferring it from the hash to an array
     while
-      #stop_loop == false
 
       # assigns the direction value to variable
       direction = steps[arr_cycle][:html_instructions]
@@ -84,30 +80,18 @@ class GoogleMaps
       strip_dir = direction.gsub!(/(<[^>]*>)|\n|\t/s) {""}
       strip_dir = strip_dir.downcase
 
-      puts 'direction inspect'
-      puts direction.inspect
       # puts previous elements in array
       directions << strip_dir
       directions << "for"
       directions << duration
 
-      # variable to cycle through array.
+      # variable to cycle through array above.
       arr_cycle += 1
 
-      puts 'strip_dir inspect'
-      puts strip_dir.inspect
-
-      # Finds the element in array that is equal to street name
-      #stop_loop =
-      if strip_dir.include?(street)
-        puts 'strip_dir inspect in IF'
-        puts strip_dir.inspect
+      # This stops the loop when the word destination is found because that is at the end of the list of directions that google give the program.
+      if strip_dir.include?('destination')
         break
       end
-
-      # puts 'stop_loop inspect'
-      # puts stop_loop.inspect
-
     end
 
     return directions
@@ -146,7 +130,8 @@ class PromptsTable
             Press enter to continue.", #11
            "Okay, no problem!\n
             Press enter to continue.", #12
-           "Do you want to save directions to a file?", #13
+           "Do you want to save directions to a file?
+           (Y)es or (N)o", #13
            "Directions saved to directions.txt\n
             Press return to exit program." #14
         ]
@@ -178,7 +163,7 @@ class PromptsTable
 
    # Cycles through the prompts and stores location
 
-  # Main promppts to ask user for destination and/or origin
+  # Main method for prompts to ask user for destination and/or origin
   def ask_user(from_or_to)
 
      # Test if the user is entering origin or destination
@@ -195,7 +180,7 @@ class PromptsTable
      gets.chomp
 
      system 'clear'
-
+     
      continue = 'n'
 
      @prompt_sel_count = 1
@@ -291,9 +276,6 @@ class PromptsTable
   # Prints directions
   def print_dir(directions)
 
-    puts 'directions inspect'
-    puts directions.inspect
-
     puts prompt_sel(10)
     correct = gets.chomp.downcase
     system 'clear'
@@ -369,28 +351,18 @@ m_prompt = PromptsTable.new
 maps = GoogleMaps.new
 
 # Ask user for origin, destination, and mode
-# origin = m_prompt.ask_user(0)
-# destination = m_prompt.ask_user(1)
-# mode = m_prompt.mode
+origin = m_prompt.ask_user(0)
+destination = m_prompt.ask_user(1)
+mode = m_prompt.mode
 
 # Prints out how long it'll take and how far away
-#maps.dist_time(origin, destination, mode)
+maps.dist_time(origin, destination, mode)
 
-origin = "44 crystal st, petersham, nsw, australia"
-destination = " 7 Kelly St, Ultimo, NSW, australia "
-mode = "driving"
 # Saves directions JSON
 json_dir = maps.directions(origin, destination, mode)
 
-# Extracts the street name from destination to use as loop limiter
-# when printing directions
-street = maps.extract_street(destination)
-
 # Converts JSON to accessible format to print
-directions = maps.access_directions(json_dir, street)
-
-puts 'direction inspect'
-puts directions.inspect
+directions = maps.access_directions(json_dir)
 
 # Prints directions if user chooses
 m_prompt.print_dir(directions)
