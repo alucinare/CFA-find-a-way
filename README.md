@@ -58,15 +58,15 @@ Your API key should be 40 characters long, and begin with AIza.
 
 Important: This key should be kept secret on your server. The config file you create will contain the API key. Inside the file will look like this:
 
-  `class Config
-    API_KEY = 'YOUR_API_KEY_HERE'
-   end`
+  `class Config`
+    `API_KEY = 'YOUR_API_KEY_HERE'`
+   `end`
 
 ## Usage
 
 In the terminal:
 
-  `ruby find_a_way_complete.rb`
+  `$ ruby find_a_way_complete.rb`
   
 Follow the instructions. Enjoy
 
