@@ -1,0 +1,10 @@
+  ERROR: find_a_way_complete.rb:71:in `access_directions': undefined method `[]' for nil:NilClass (NoMethodError)
+	from find_a_way_complete.rb:376:in `<main>'
+
+      It's not a argument problem as the 2 arguments that are being sent into this method have objects in them.
+
+KNOWN ISSUE
+- there are some strings that don't have a space between them, for easier reading I'd like to fix that up
+    EXAMPLE -
+    CURRENT: Continue onto Citylink/State Route 43Toll road
+    FUTURE: Continue onto Citylink/State Route 43 Toll road.
